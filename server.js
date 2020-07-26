@@ -19,7 +19,7 @@ mongoose.connection.once('open', ()=>{
 // Middleware
 
 // Definition
-const whitelist = ['http://localhost:3000']
+const whitelist = ['http://localhost:3000', 'https://forkitfronthend.herokuapp.com/']
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1) {
