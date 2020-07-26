@@ -11,7 +11,7 @@ require ('dotenv').config()
 mongoose.connection.on('error', err => console.log(err.message + ' is Mongod not running?'))
 mongoose.connection.on('disconnected', () => console.log('mongo disconnected'))
 //////////////////////////NEEDS TO BE UPDATED FOR HOSTING!!!!!!!!!!!!!!!!!!!!!!!!
-mongoose.connect('mongodb://remo:A12345@ds153096.mlab.com:53096/heroku_5v00vl53', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.connection.once('open', ()=>{
     console.log('connected to mongoose...')
 })
@@ -19,10 +19,11 @@ mongoose.connection.once('open', ()=>{
 // Middleware
 
 // Definition
-const whitelist = ['http://localhost:3000', 'https://forkitfronthend.herokuapp.com/']
+
+const allowList = process.env.CORS_ALLOW_LIST.split(';')
 const corsOptions = {
     origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
+        if (allowList.indexOf(origin) !== -1) {
             callback(null, true)
         } else {
             callback(new Error('Not allowed by CORS'))
