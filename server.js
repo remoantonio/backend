@@ -11,7 +11,7 @@ require ('dotenv').config()
 mongoose.connection.on('error', err => console.log(err.message + ' is Mongod not running?'))
 mongoose.connection.on('disconnected', () => console.log('mongo disconnected'))
 //////////////////////////NEEDS TO BE UPDATED FOR HOSTING!!!!!!!!!!!!!!!!!!!!!!!!
-mongoose.connect('mongodb://localhost:27017/fork', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://remo:A12345@ds153096.mlab.com:53096/heroku_5v00vl53', { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.connection.once('open', ()=>{
     console.log('connected to mongoose...')
 })
