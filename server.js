@@ -54,12 +54,18 @@ function loginCheck(req, res, next) {
         next()
     }
 }
+
 // User Section Paths
 const userRoutes = ['/']
-app.use(userRoutes, loginCheck)
+// app.use(userRoutes, loginCheck)
 
 // Test Route
 app.get('/ping', (req, res) => {res.send('Pong')
+})
+
+app.use(function (err, req, res, next) {
+    console.error(err.stack)
+    res.status(500).send('Something broke!')
 })
 
 // Listen
