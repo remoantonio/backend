@@ -59,7 +59,7 @@ const userRoutes = ['/']
 app.use(userRoutes, loginCheck)
 
 // Test Route
-app.get('/', (req, res) => {res.send('Hello')
+app.get('/ping', (req, res) => {res.send('Pong')
 })
 
 // Listen
