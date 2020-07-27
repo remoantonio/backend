@@ -49,15 +49,16 @@ app.use('/user', userController)
 function loginCheck(req, res, next) {
     if (!req.session.currentUser) {
         // res.redirect('/fork/')
+        next()
     } else {
-        currentUser = req.session.currentUser
+        res.status(200).json(req.session.currentUser)
         next()
     }
 }
 
 // User Section Paths
 const userRoutes = ['/']
-// app.use(userRoutes, loginCheck)
+app.use(userRoutes, loginCheck)
 
 // Test Route
 app.get('/ping', (req, res) => {res.send('Pong')
