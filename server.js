@@ -38,8 +38,8 @@ const userController = require('./controllers/userController.js')
 
 // Usage
 app.use(express.json())
-app.use(cors())
-// app.use(cors(corsOptions))
+// app.use(cors())
+app.use(cors(corsOptions))
 app.use(
     session({
         secret: "secret",
