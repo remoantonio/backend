@@ -60,7 +60,7 @@ const userRoutes = ['/']
 // app.use(userRoutes, loginCheck)
 
 // Test Route
-app.get('/ping', (req, res) => {res.send('Pong')
+app.get('/ping', (req, res) => {res.send('Pong', req.session.currentUser)
 })
 
 app.use(function (err, req, res, next) {
