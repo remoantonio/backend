@@ -3,6 +3,7 @@ const express = require('express')
 const session = require('express-session')
 const cors = require('cors')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 const app = express()
 const PORT = process.env.PORT || 3003
 require ('dotenv').config()
@@ -53,8 +54,6 @@ app.use(
 //     resave: false,
 //     saveUninitialized: false
 // }));
-app.use('/fork', forkController)
-app.use('/user', userController)
 
 // login authentication function and middleware
 function loginCheck(req, res, next) {
@@ -69,10 +68,41 @@ function loginCheck(req, res, next) {
     }
 }
 
-// User Section Paths
-const userRoutes = ['/']
-app.use(userRoutes, loginCheck)
+// Authentication token check
+function authenticateToken(req, res, next) {
+    // console.log('header',req.headers)
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (token == null) return res.sendStatus(401)
 
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403)
+        req.user = user
+        // console.log('here is the data',user)
+        next()
+    })
+}
+
+// function decodeToken(req,res,next){
+//     console.log('header',req.headers)
+//     const authHeader = req.headers['authorization']
+//     const token = authHeader && authHeader.split(' ')[1]
+//     if (token == null) return res.sendStatus(401)
+
+//     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET,[complete], (err, user) => {
+//         if (err) return res.sendStatus(403)
+//         req.user = user
+//         next()
+//     })
+// }
+
+// User Section Paths
+const userRoutes = ['/fork']
+app.use(userRoutes, authenticateToken)
+
+
+app.use('/fork', forkController)
+app.use('/user', userController)
 // Test Route
 app.get('/ping', (req, res) => {res.send('Pong')
 })
@@ -88,5 +118,5 @@ app.use(function (err, req, res, next) {
 
 // Listen
 app.listen(PORT, () => {
-    console.log('Listening')
+    console.log('Listening',PORT)
 })

@@ -1,6 +1,7 @@
 // Require Packages
 const express = require('express')
 const user = express.Router();
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 
 // Model
@@ -47,7 +48,10 @@ user.post('/login', (req, res) => {
             res.status(400).json({message: 'User not found.'})
         } else {
             if (bcrypt.compareSync(req.body.password, user.password)) {
-                res.status(200).json([user.userName, user.recipes])
+                const userName = user.userName
+                const userPass = {userName : userName}
+                const accessToken = jwt.sign(userPass, process.env.ACCESS_TOKEN_SECRET)
+                res.status(200).json({accessToken : accessToken, userName: user.userName, userRecipes : user.recipes})
             } else {
                 res.status(400).json({message: 'Invalid password'})
             }
@@ -67,9 +71,10 @@ user.post('/new', (req, res) => {
                     if (err) {
                         res.status(400).json({ error: err.message })
                     } else {
-                        req.session.currentUser = user
-                        console.log('creation',req.session.currentUser)
-                        res.status(200).json(user.userName)
+                        const userName = user.userName
+                        const userPass = {userName : userName}
+                        const accessToken = jwt.sign(userPass, process.env.ACCESS_TOKEN_SECRET)
+                        res.status(200).json({accessToken : accessToken, userName: user.userName, userRecipes : user.recipes})
                     }
                 })
             } else {
@@ -82,29 +87,31 @@ user.post('/new', (req, res) => {
 })
 
 // Create User returning password
-user.post('/new', (req, res) => {
-    Fork.findOne({ userName: req.body.userName }, (err, user) => {
-        if (err) { res.status(400).json({ error: err.message }) }
-        if (user == null) {
-            if (req.body.password == req.body.password2) {
-                req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
-                delete req.body.password2
-                Fork.create(req.body, (err, user) => {
-                    if (err) {
-                        res.status(400).json({ error: err.message })
-                    } else {
-                        req.session.currentUser = user
-                        res.status(200).json({user})
-                    }
-                })
-            } else {
-                res.status(400).json({'message' : 'Passwords do not match.'})
-            }
-        } else {
-            res.status(400).json({ 'message' : 'User Name is not available.'})
-        }
-    })
-})
+// user.post('/new', (req, res) => {
+//     Fork.findOne({ userName: req.body.userName }, (err, user) => {
+//         if (err) { res.status(400).json({ error: err.message }) }
+//         if (user == null) {
+//             if (req.body.password == req.body.password2) {
+//                 req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
+//                 delete req.body.password2
+//                 Fork.create(req.body, (err, user) => {
+//                     if (err) {
+//                         res.status(400).json({ error: err.message })
+//                     } else {
+//                         const userName = user.userName
+//                         const userPass = {name : userName}
+//                         const accessToken = jwt.sign(userPass, process.env.ACCESS_TOKEN_SECRET)
+//                         res.status(200).json({accessToken : accessToken})
+//                     }
+//                 })
+//             } else {
+//                 res.status(400).json({'message' : 'Passwords do not match.'})
+//             }
+//         } else {
+//             res.status(400).json({ 'message' : 'User Name is not available.'})
+//         }
+//     })
+// })
 
 
 // Export Router

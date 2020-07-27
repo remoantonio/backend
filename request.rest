@@ -1,0 +1,13 @@
+POST http://localhost:3003/user/new HTTP/1.1\r\n
+Content-Type:application/json
+
+{
+    "userName" : "someUser111",
+    "password" : "12345",
+    "password2" : "12345"
+}
+
+###
+GET http://localhost:3003/fork HTTP/1.1\r\n
+Authorization: Bearer
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoic29tZVVzZXIxMTEiLCJpYXQiOjE1OTU4NjU2MDh9.m4ZwFpXk6TQaX_eSWudHK3CHnwvX2hPwBeYSH9_VKQs
