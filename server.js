@@ -37,11 +37,22 @@ const userController = require('./controllers/userController.js')
 app.use(express.json())
 app.use(cors())
 // app.use(cors(corsOptions))
-app.use(session({
-    secret: process.env.SECRET,
-    resave: true,
-    saveUninitialized: false
-}));
+app.use(
+    session({
+        secret: "secret",
+        saveUninitialized: false,
+        resave: true,
+        rolling: true,
+        cookie: {
+            expires: 20 * 1000
+        }
+    })
+);
+// app.use(session({
+//     secret: process.env.SECRET,
+//     resave: false,
+//     saveUninitialized: false
+// }));
 app.use('/fork', forkController)
 app.use('/user', userController)
 
