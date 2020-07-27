@@ -49,8 +49,10 @@ app.use('/user', userController)
 function loginCheck(req, res, next) {
     if (!req.session.currentUser) {
         // res.redirect('/fork/')
+        console.log(req.session.currentUser)
         next()
     } else {
+        console.log(req.session.currentUser)
         res.status(200).json(req.session.currentUser)
         next()
     }
