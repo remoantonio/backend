@@ -66,6 +66,10 @@ app.use(userRoutes, loginCheck)
 app.get('/ping', (req, res) => {res.send('Pong')
 })
 
+// Get Login Route
+app.get('/current', (req, res) => {res.status(200).json(req.session.currentUser)
+})
+
 app.use(function (err, req, res, next) {
     console.error(err.stack)
     res.status(500).send('Something broke!')
