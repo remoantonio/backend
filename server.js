@@ -39,7 +39,7 @@ app.use(cors())
 // app.use(cors(corsOptions))
 app.use(session({
     secret: process.env.SECRET,
-    resave: false,
+    resave: true,
     saveUninitialized: false
 }));
 app.use('/fork', forkController)
