@@ -25,8 +25,10 @@ const allowList = process.env.CORS_ALLOW_LIST.split(';')
 const corsOptions = {
     origin: function (origin, callback) {
         if (allowList.indexOf(origin) !== -1) {
+            console.log('am I reaching?')
             callback(null, true)
         } else {
+            console.log('am I reaching?')
             callback(new Error('Not allowed by CORS'))
         }
     }
@@ -49,11 +51,6 @@ app.use(
         }
     })
 );
-// app.use(session({
-//     secret: process.env.SECRET,
-//     resave: false,
-//     saveUninitialized: false
-// }));
 
 // login authentication function and middleware
 function loginCheck(req, res, next) {
