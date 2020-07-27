@@ -25,10 +25,10 @@ const allowList = process.env.CORS_ALLOW_LIST.split(';')
 const corsOptions = {
     origin: function (origin, callback) {
         if (allowList.indexOf(origin) !== -1) {
-            console.log('am I reaching?')
+            console.log('am I reaching? YES?')
             callback(null, true)
         } else {
-            console.log('am I reaching?')
+            console.log('am I reaching? NO?')
             callback(new Error('Not allowed by CORS'))
         }
     }
@@ -38,8 +38,8 @@ const userController = require('./controllers/userController.js')
 
 // Usage
 app.use(express.json())
-// app.use(cors())
-app.use(cors(corsOptions))
+app.use(cors())
+// app.use(cors(corsOptions))
 app.use(
     session({
         secret: "secret",
