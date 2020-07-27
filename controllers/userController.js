@@ -68,6 +68,7 @@ user.post('/new', (req, res) => {
                         res.status(400).json({ error: err.message })
                     } else {
                         req.session.currentUser = user
+                        console.log('creation',req.session.currentUser)
                         res.status(200).json(user.userName)
                     }
                 })
