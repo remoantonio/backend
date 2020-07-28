@@ -4,30 +4,16 @@ const fork = express.Router()
 const Fork = require('../models/forkModel.js')
 const jwt = require('jsonwebtoken')
 
-
-// function authenticateToken(req, res, next) {
-//     console.log(req.headers)
-//     const authHeader = req.headers['authorization']
-//     const token = authHeader && authHeader.split(' ')[1]
-//     if (token == null) return res.sendStatus(401)
-
-//     jwt.verify(token, 'secret', (err, user) => {
-//         console.log(err)
-//         if (err) return res.sendStatus(403)
-//         req.user = user
-//         next()
-//     })
-// }
 // Routes
 
 // Backend Routes
 // Show Single User Data
-fork.get('/', (req, res) => {
+fork.get('/savedRecipes', (req, res) => {
     console.log('req.user',req.user.userName)
-    Fork.find({userName:req.user.userName}, (err, recipes) => {
+    Fork.findOne({userName:req.user.userName}, (err, recipes) => {
         if (err)(res.status(400).json({ error: err.message }))
         console.log(recipes)
-        res.status(200).json({recipes})
+        res.status(200).json(recipes.recipes)
     })
 })
 
@@ -58,8 +44,10 @@ fork.delete('/delete', (req, res) => {
 
 // Add Recipe
 fork.put('/add', (req, res) => {
-    Fork.findOneAndUpdate({ userName: req.user.userName }, { $push: { recipes: req.body.recipes }}, { new: true }, (err, recipes) => {
+    // console.log('the path',req.user)
+    Fork.findOneAndUpdate({ userName: req.user.userName }, { $push: { recipes: req.body.recipe }}, { new: true }, (err, recipes) => {
         if (err) { res.status(400).json({ error: err.message }) }
+        // console.log(recipes)
         res.status(200).json(recipes.recipes)
     })
 })

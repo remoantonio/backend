@@ -11,7 +11,6 @@ require ('dotenv').config()
 // Error / Disconnection
 mongoose.connection.on('error', err => console.log(err.message + ' is Mongod not running?'))
 mongoose.connection.on('disconnected', () => console.log('mongo disconnected'))
-//////////////////////////NEEDS TO BE UPDATED FOR HOSTING!!!!!!!!!!!!!!!!!!!!!!!!
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.connection.once('open', ()=>{
     console.log('connected to mongoose...')
@@ -39,8 +38,8 @@ const userController = require('./controllers/userController.js')
 
 // Usage
 app.use(express.json())
-// app.use(cors())
-app.use(cors(corsOptions))
+app.use(cors())
+// app.use(cors(corsOptions))
 app.use(
     session({
         secret: "secret",
@@ -53,22 +52,9 @@ app.use(
     })
 );
 
-// login authentication function and middleware
-function loginCheck(req, res, next) {
-    if (!req.session.currentUser) {
-        // res.redirect('/fork/')
-        console.log(req.session.currentUser)
-        next()
-    } else {
-        console.log(req.session.currentUser)
-        res.status(200).json(req.session.currentUser)
-        next()
-    }
-}
 
 // Authentication token check
 function authenticateToken(req, res, next) {
-    // console.log('header',req.headers)
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
@@ -76,7 +62,8 @@ function authenticateToken(req, res, next) {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403)
         req.user = user
-        // console.log('here is the data',user)
+        // console.log(req.user)
+        // console.log(req.body)
         next()
     })
 }
