@@ -44,10 +44,8 @@ fork.delete('/delete', (req, res) => {
 
 // Add Recipe
 fork.put('/add', (req, res) => {
-    // console.log('the path',req.user)
     Fork.findOneAndUpdate({ userName: req.user.userName }, { $push: { recipes: req.body.recipe }}, { new: true }, (err, recipes) => {
         if (err) { res.status(400).json({ error: err.message }) }
-        // console.log(recipes)
         res.status(200).json(recipes.recipes)
     })
 })
