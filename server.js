@@ -20,7 +20,7 @@ mongoose.connection.once('open', ()=>{
 
 // Definition
 
-const allowList = process.env.CORS_ALLOW_LIST.split(';')
+const allowList = 'https://forkitfrontend.herokuapp.com'
 const corsOptions = {
     origin: function (origin, callback) {
         if (allowList.indexOf(origin) !== -1) {
